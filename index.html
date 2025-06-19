@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEO Audit Matrix</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/toastify-js@1.12.0/src/toastify.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 100%);
+            background-size: 200% 200%;
+            animation: gradientShift 15s ease infinite;
+            color: #e0e1dd;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+        }
+        .neon-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid #00f5d4;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            color: #00f5d4;
+        }
+        .neon-input:focus {
+            box-shadow: 0 0 15px #00f5d4, 0 0 25px #00f5d4;
+            border-color: #ff006e;
+            outline: none;
+        }
+        .neon-button {
+            background: linear-gradient(45deg, #00f5d4, #ff006e);
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            color: #fff;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px #00f5d4;
+        }
+        .neon-button:hover {
+            box-shadow: 0 0 20px #ff006e, 0 0 30px #00f5d4;
+            transform: translateY(-2px);
+        }
+        .neon-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        .table-row {
+            transition: all 0.3s ease;
+        }
+        .table-row:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: scale(1.02);
+        }
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            border-top: 4px solid #00f5d4;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            display: none;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .toggle-light .neon-input {
+            background: rgba(255, 255, 255, 0.8);
+            color: #1b263b;
+            border-color: #1b263b;
+        }
+        .toggle-light .neon-input:focus {
+            box-shadow: 0 0 15px #1b263b, 0 0 25px #1b263b;
+            border-color: #ff006e;
+        }
+        .toggle-light .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(0, 0, 0, 0.2);
+        }
+        .toggle-light .text-gray-100 {
+            color: #1b263b;
+        }
+        .toggle-light .table-row:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="flex flex-col">
+    <div class="container mx-auto p-6 flex-grow">
+        <!-- Header with Theme Toggle -->
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-4xl font-bold text-cyan-300 drop-shadow-lg">SEO Audit Matrix</h1>
+            <button id="themeToggle" class="p-2 bg-transparent border border-cyan-300 rounded-full hover:bg-cyan-300 hover:text-gray-900 transition-all">
+                <svg id="moonIcon" class="w-6 h-6 text-cyan-300 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                <svg id="sunIcon" class="w-6 h-6 text-cyan-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            </button>
+        </div>
+
+        <!-- Audit Form -->
+        <div class="glass-card p-8 mb-8" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-perspective="1000">
+            <h2 class="text-2xl font-semibold text-cyan-300 mb-6">Initiate SEO Scan</h2>
+            <div class="space-y-4">
+                <input id="url" type="text" placeholder="Enter URL (e.g., https://example.com)" class="w-full p-3 neon-input placeholder-gray-400">
+                <input id="email" type="email" placeholder="Enter Email" class="w-full p-3 neon-input placeholder-gray-400">
+                <button id="runAudit" class="w-full neon-button flex items-center justify-center">
+                    <span id="buttonText">Launch Scan</span>
+                    <div id="spinner" class="spinner ml-2"></div>
+                </button>
+            </div>
+            <div id="status" class="mt-4 text-sm text-gray-300"></div>
+        </div>
+
+        <!-- Audit Results -->
+        <div id="results" class="glass-card p-8 hidden" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-perspective="1000">
+            <h2 class="text-2xl font-semibold text-cyan-300 mb-6">Scan Results</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full border-collapse">
+                    <thead>
+                        <tr class="bg-gray-900 bg-opacity-50">
+                            <th class="p-3 text-left text-cyan-300 border-b border-gray-600">URL</th>
+                            <th class="p-3 text-left text-cyan-300 border-b border-gray-600">Timestamp</th>
+                            <th class="p-3 text-left text-cyan-300 border-b border-gray-600">Metrics</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultsTable"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 bg-opacity-80 text-cyan-300 text-center py-4 mt-auto">
+        <p>© 2025 SEO Audit Matrix. Powered by xAI.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js@1.12.0/src/toastify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.7.2/dist/vanilla-tilt.min.js"></script>
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const sunIcon = document.getElementById('sunIcon');
+        const moonIcon = document.getElementById('moonIcon');
+
+        if (localStorage.getItem('theme') === 'light') {
+            document.body.classList.add('toggle-light');
+            moonIcon.classList.remove('hidden');
+            sunIcon.classList.add('hidden');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('toggle-light');
+            if (document.body.classList.contains('toggle-light')) {
+                localStorage.setItem('theme', 'light');
+                moonIcon.classList.remove('hidden');
+                sunIcon.classList.add('hidden');
+            } else {
+                localStorage.setItem('theme', 'dark');
+                moonIcon.classList.add('hidden');
+                sunIcon.classList.remove('hidden');
+            }
+        });
+
+        // Audit Form Submission
+        document.getElementById('runAudit').addEventListener('click', async () => {
+            const url = document.getElementById('url').value;
+            const email = document.getElementById('email').value;
+            const status = document.getElementById('status');
+            const buttonText = document.getElementById('buttonText');
+            const spinner = document.getElementById('spinner');
+
+            if (!url || !email) {
+                Toastify({
+                    text: "Please enter both URL and email.",
+                    duration: 3000,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "linear-gradient(to right, #ff006e, #ff4d94)",
+                }).showToast();
+                return;
+            }
+
+            status.innerHTML = '';
+            buttonText.textContent = 'Scanning...';
+            spinner.style.display = 'inline-block';
+            document.getElementById('runAudit').disabled = true;
+
+            try {
+                const response = await fetch('http://localhost:5000/audit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url, email })
+                });
+                const data = await response.json();
+
+                if (data.error) {
+                    Toastify({
+                        text: `Error: ${data.error}`,
+                        duration: 3000,
+                        gravity: "top",
+                        position: "right",
+                        backgroundColor: "linear-gradient(to right, #ff006e, #ff4d94)",
+                    }).showToast();
+                } else {
+                    Toastify({
+                        text: `Scan completed. Report ${data.email_sent ? 'sent to email' : 'failed to send'}.`,
+                        duration: 3000,
+                        gravity: "top",
+                        position: "right",
+                        backgroundColor: "linear-gradient(to right, #00f5d4, #00b4d8)",
+                    }).showToast();
+                    fetchResults();
+                }
+            } catch (error) {
+                Toastify({
+                    text: `Error: ${error.message}`,
+                    duration: 3000,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "linear-gradient(to right, #ff006e, #ff4d94)",
+                }).showToast();
+            } finally {
+                buttonText.textContent = 'Launch Scan';
+                spinner.style.display = 'none';
+                document.getElementById('runAudit').disabled = false;
+            }
+        });
+
+        // Fetch and Display Results
+        async function fetchResults() {
+            try {
+                const response = await fetch('http://localhost:5000/results');
+                const results = await response.json();
+                const table = document.getElementById('resultsTable');
+                const resultsDiv = document.getElementById('results');
+                table.innerHTML = '';
+                resultsDiv.classList.remove('hidden');
+
+                if (results.length === 0) {
+                    table.innerHTML = '<tr><td colspan="3" class="p-3 text-center text-gray-300">No scan results available.</td></tr>';
+                    return;
+                }
+
+                results.forEach(result => {
+                    const row = document.createElement('tr');
+                    row.classList.add('table-row', 'border-b', 'border-gray-600');
+                    row.innerHTML = `
+                        <td class="p-3 text-gray-100">${result.url}</td>
+                        <td class="p-3 text-gray-100">${result.timestamp}</td>
+                        <td class="p-3 text-gray-100">
+                            <strong>Title:</strong> ${result.title}<br>
+                            <strong>Meta Description:</strong> ${result.meta_desc}<br>
+                            <strong>H1 Count:</strong> ${result.h1_count}<br>
+                            <strong>Images Missing Alt:</strong> ${result.img_alt_missing}<br>
+                            <strong>Broken Links:</strong> ${result.broken_links}<br>
+                            <strong>Organic Traffic:</strong> ${result.organic_traffic || 'N/A'}<br>
+                            <strong>Keyword Rankings:</strong> ${result.keyword_rankings || 'N/A'}<br>
+                            <strong>CTR:</strong> ${result.ctr ? result.ctr + '%' : 'N/A'}<br>
+                            <strong>Bounce Rate:</strong> ${result.bounce_rate ? result.bounce_rate + '%' : 'N/A'}<br>
+                            <strong>Page Load Speed:</strong> ${result.page_load_speed ? result.page_load_speed + 's' : 'N/A'}<br>
+                            <strong>Backlinks:</strong> ${result.backlinks || 'N/A'}<br>
+                            <strong>Conversion Rate:</strong> ${result.conversion_rate ? result.conversion_rate + '%' : 'N/A'}
+                        </td>
+                    `;
+                    table.appendChild(row);
+                });
+            } catch (error) {
+                Toastify({
+                    text: `Error fetching results: ${error.message}`,
+                    duration: 3000,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "linear-gradient(to right, #ff006e, #ff4d94)",
+                }).showToast();
+            }
+        }
+
+        // Initialize Tilt Effect
+        VanillaTilt.init(document.querySelectorAll("[data-tilt]"), {
+            max: 10,
+            speed: 400,
+            perspective: 1000,
+        });
+
+        // Fetch results on page load
+        fetchResults();
+    </script>
+</body>
+</html>
